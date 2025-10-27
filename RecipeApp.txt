@@ -1,0 +1,336 @@
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  ScrollView,
+  Button
+} from 'react-native';
+
+const recipes = [
+  {
+    id: '1',
+    name: 'Chicken Biryani',
+    category: 'Non-Veg',
+    image: 'https://unsplash.com/photos/q29oNjt3sEQ/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8Y2hpY2tlbiUyMGJyaXlhbml8ZW58MHx8fHwxNzYxNTc2NzkyfDA&force=true',
+    ingredients: [
+      '2 cups basmati rice',
+      '500g chicken pieces',
+      '1 onion (sliced)',
+      '1 tomato (chopped)',
+      'Spices, curd, oil, salt, etc.'
+    ],
+    method: 1. Wash and soak rice.\n2. Cook chicken with masala.\n3. Layer rice and chicken.\n4. Dum cook for 15 minutes.
+  },
+  {
+    id: '2',
+    name: 'Paneer Butter Masala',
+    category: 'Veg',
+    image: 'https://unsplash.com/photos/kwgJPv22PMc/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8UGFuZWVyJTIwQnV0dGVyJTIwTWFzYWxhfGVufDB8fHx8MTc2MTU3Njg3OHww&force=true',
+    ingredients: [
+      '200g paneer cubes',
+      '2 tomatoes (pureed)',
+      '1 onion (chopped)',
+      'Butter, cream, garam masala, etc.'
+    ],
+    method: 1. Sauté onions, add tomato puree.\n2. Add spices and cream.\n3. Add paneer and cook for 5 mins.
+  },
+  {
+    id: '3',
+    name: 'Masala Dosa',
+    category: 'Breakfast',
+    image: 'https://unsplash.com/photos/5oF7d_hPJG4/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8TWFzYWxhJTIwRG9zYXxlbnwwfHx8fDE3NjE1NzY4OTd8MA&force=true',
+    ingredients: [
+      'Dosa batter',
+      '2 boiled potatoes',
+      'Onions, mustard, curry leaves',
+      'Salt, oil, spices'
+    ],
+    method: 1. Make potato masala.\n2. Spread dosa batter.\n3. Add masala, fold, and serve.
+  },
+  {
+    id: '4',
+    name: 'Cold Coffee',
+    category: 'Beverage',
+    image: 'https://unsplash.com/photos/44d0W8JhoPc/download?ixid=M3wxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNzYxNTc2NTgyfA&force=true',
+    ingredients: [
+      '1 cup milk',
+      '2 tsp coffee powder',
+      'Sugar and ice cubes'
+    ],
+    method: 1. Blend coffee, milk, sugar, and ice.\n2. Serve chilled with ice cubes.
+  },
+  {
+    id: '5',
+    name: 'Gulab Jamun',
+    category: 'Dessert',
+    image: 'https://unsplash.com/photos/2oJ4eGRPqrE/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8R3VsYWIlMjBKYW11bnxlbnwwfHx8fDE3NjE1NzY5Mjh8MA&force=true',
+    ingredients: [
+      '1 cup milk powder',
+      '2 tbsp ghee',
+      'Sugar syrup, cardamom, oil for frying'
+    ],
+    method: 1. Make dough, roll balls.\n2. Fry until golden.\n3. Soak in sugar syrup.
+  },
+  {
+    id: '6',
+    name: 'Veg Fried Rice',
+    category: 'Rice',
+    image: 'https://unsplash.com/photos/MVMohJBieo4/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8VmVnJTIwRnJpZWQlMjBSaWNlfGVufDB8fHx8MTc2MTU3Njk1MXww&force=true',
+    ingredients: [
+      '2 cups cooked rice',
+      'Mixed vegetables',
+      'Soy sauce, vinegar, oil'
+    ],
+    method: 1. Stir-fry vegetables.\n2. Add rice and sauces.\n3. Mix well and serve.
+  },
+  {
+    id: '7',
+    name: 'Egg Curry',
+    category: 'Non-Veg',
+    image: 'https://unsplash.com/photos/rbEtzd20Qcw/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8RWdnJTIwQ3Vycnl8ZW58MHx8fHwxNzYxNTc3MDM2fDA&force=true',
+    ingredients: [
+      '4 boiled eggs',
+      '2 onions (chopped)',
+      '2 tomatoes (pureed)',
+      'Ginger garlic paste, spices, oil, salt'
+    ],
+    method: 1. Sauté onions and paste.\n2. Add tomato puree and spices.\n3. Add boiled eggs and cook for 5 minutes.
+  },
+  {
+    id: '8',
+    name: 'Idli with Sambar',
+    category: 'Breakfast',
+    image: 'https://unsplash.com/photos/H0_rN4gHc4k/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8M3x8aWRsaSUyMHdpdGglMjBTYW1iYXJ8ZW58MHx8fHwxNzYxNTc3MDUxfDA&force=true',
+    ingredients: [
+      'Idli batter',
+      'Toor dal, tamarind, vegetables for sambar',
+      'Mustard, curry leaves, oil, spices'
+    ],
+    method: 1. Steam idlis.\n2. Cook dal with tamarind and veggies.\n3. Temper with mustard seeds.\n4. Serve hot with idli.
+  },
+  {
+    id: '9',
+    name: 'Vegetable Soup',
+    category: 'Soup',
+    image: 'https://unsplash.com/photos/gDwy_JEoz8k/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8M3x8VmVnZXRhYmxlJTIwU291cHxlbnwwfHx8fDE3NjE1NzcwODB8MA&force=true',
+    ingredients: [
+      'Mixed vegetables (carrot, beans, cabbage)',
+      '1 tsp butter',
+      'Salt, pepper, water'
+    ],
+    method: 1. Boil vegetables until soft.\n2. Blend half and add back to soup.\n3. Season with salt and pepper.\n4. Serve hot.
+  },
+  {
+    id: '10',
+    name: 'Falooda',
+    category: 'Dessert',
+    image: 'https://unsplash.com/photos/vA0_270so1U/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8RmFsb29kYXxlbnwwfHx8fDE3NjE1NzcwOTR8MA&force=true',
+    ingredients: [
+      'Milk, rose syrup',
+      'Falooda sev, sabja seeds',
+      'Ice cream, dry fruits'
+    ],
+    method: 1. Soak sabja seeds.\n2. Layer glass with rose syrup, sev, milk, and ice cream.\n3. Garnish with nuts.\n4. Serve chilled.
+  },
+  {
+    id: '11',
+    name: 'Fish Fry',
+    category: 'Non-Veg',
+    image: 'https://unsplash.com/photos/CWUpnRTlXB0/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8M3x8RmlzaCUyMEZyeXxlbnwwfHx8fDE3NjE1NzcyMTR8MA&force=true',
+    ingredients: [
+      '4 fish slices',
+      'Red chili powder, turmeric, salt',
+      'Lemon juice, oil for frying'
+    ],
+    method: 1. Marinate fish with spices and lemon juice.\n2. Let rest for 20 mins.\n3. Shallow fry both sides until crisp and golden.
+  },
+  {
+    id: '12',
+    name: 'Tomato Soup',
+    category: 'Soup',
+    image: 'https://unsplash.com/photos/Qct8v6wdyRs/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8VG9tYXRvJTIwU291cHxlbnwwfHx8fDE3NjE1NzcyODB8MA&force=true',
+    ingredients: [
+      '4 ripe tomatoes',
+      '1 onion, 2 cloves garlic',
+      'Butter, salt, pepper, water'
+    ],
+    method: 1. Sauté onions and garlic in butter.\n2. Add tomatoes and water.\n3. Blend and strain.\n4. Simmer and season with salt and pepper.
+  },
+  {
+    id: '13',
+    name: 'Mango Lassi',
+    category: 'Beverage',
+    image: 'https://unsplash.com/photos/KlVIYmGVRQ8/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8TWFuZ28lMjBMYXNzaXxlbnwwfHx8fDE3NjE0OTM5MjB8MA&force=true',
+    ingredients: [
+      '1 ripe mango (peeled and chopped)',
+      '1 cup curd (yogurt)',
+      'Sugar or honey, ice cubes'
+    ],
+    method: 1. Blend mango, curd, and sugar.\n2. Add ice cubes.\n3. Serve chilled.
+  }
+
+
+];
+
+const categories = [
+  'All',
+  'Veg',
+  'Non-Veg',
+  'Snack',
+  'Beverage',
+  'Dessert',
+  'Breakfast',
+  'Rice',
+  'Soup'
+];
+
+
+export default function App() {
+  const [search, setSearch] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedDish, setSelectedDish] = useState(null);
+
+  const filteredRecipes = recipes.filter(r => {
+    const matchesCategory =
+      selectedCategory === 'All' || r.category === selectedCategory;
+    const matchesSearch = r.name.toLowerCase().includes(search.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  if (selectedDish) {
+    return (
+      <ScrollView style={styles.container}>
+        <Button title="← Go Back" onPress={() => setSelectedDish(null)} />
+        <Text style={styles.title}>{selectedDish.name}</Text>
+        {selectedDish.image ? (
+          <Image source={{ uri: selectedDish.image }} style={styles.detailImage} />
+        ) : (
+          <View style={styles.imagePlaceholder}><Text>No Image</Text></View>
+        )}
+        <Text style={styles.categoryTag}>{selectedDish.category}</Text>
+
+        <Text style={styles.subTitle}>Ingredients:</Text>
+        {selectedDish.ingredients.map((item, index) => (
+          <Text key={index} style={styles.listItem}>• {item}</Text>
+        ))}
+
+        <Text style={styles.subTitle}>Method:</Text>
+        <Text style={styles.method}>{selectedDish.method}</Text>
+      </ScrollView>
+    );
+  }
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}>🍽️ Food Recipe App</Text>
+
+      <TextInput
+        style={styles.search}
+        placeholder="Search dishes..."
+        value={search}
+        onChangeText={setSearch}
+      />
+
+      <View style={styles.categoryContainer}>
+        {categories.map(cat => (
+          <TouchableOpacity
+            key={cat}
+            style={[
+              styles.categoryButton,
+              selectedCategory === cat && styles.activeCategory
+            ]}
+            onPress={() => setSelectedCategory(cat)}
+          >
+            <Text
+              style={[
+                styles.categoryText,
+                selectedCategory === cat && styles.activeCategoryText
+              ]}
+            >
+              {cat}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      <FlatList
+        data={filteredRecipes}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={styles.card}
+            onPress={() => setSelectedDish(item)}
+          >
+            {item.image ? (
+              <Image source={{ uri: item.image }} style={styles.image} />
+            ) : (
+              <View style={styles.imagePlaceholder}>
+                <Text>No Image</Text>
+              </View>
+            )}
+            <View>
+              <Text style={styles.dishName}>{item.name}</Text>
+              <Text style={styles.categoryTagSmall}>{item.category}</Text>
+            </View>
+          </TouchableOpacity>
+        )}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 16, backgroundColor: '#fff', marginTop: 25 },
+  header: { fontSize: 22, fontWeight: 'bold', marginBottom: 10, textAlign: 'center' },
+  search: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 8, marginBottom: 10 },
+  categoryContainer: { flexDirection: 'row', flexWrap: 'wrap', marginBottom: 10, justifyContent: 'center' },
+  categoryButton: {
+    borderWidth: 1,
+    borderColor: '#aaa',
+    borderRadius: 20,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    margin: 4,
+  },
+  activeCategory: {
+    backgroundColor: '#4caf50',
+    borderColor: '#4caf50'
+  },
+  categoryText: { color: '#333', fontWeight: '600' },
+  activeCategoryText: { color: '#fff' },
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderColor: '#eee'
+  },
+  image: { width: 60, height: 60, borderRadius: 8, marginRight: 10 },
+  imagePlaceholder: {
+    width: 60,
+    height: 60,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 8,
+    marginRight: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  dishName: { fontSize: 18, fontWeight: '600' },
+  categoryTagSmall: { fontSize: 12, color: '#888' },
+  title: { fontSize: 24, fontWeight: 'bold', marginVertical: 10 },
+  detailImage: { width: '100%', height: 200, borderRadius: 8, marginVertical: 10 },
+  categoryTag: {
+    fontSize: 16,
+    color: '#4caf50',
+    marginBottom: 8,
+    fontWeight: 'bold'
+  },
+  subTitle: { fontSize: 20, fontWeight: 'bold', marginTop: 10 },
+  listItem: { fontSize: 16, marginLeft: 10, marginVertical: 2 },
+  method: { fontSize: 16, marginTop: 5, lineHeight: 22 },
+});
